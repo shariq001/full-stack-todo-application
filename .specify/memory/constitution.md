@@ -1,55 +1,33 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# In-Memory Python Console To-Do App Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### Simplicity (MVP Approach)
+Focus on core functionality without over-engineering; Implement minimal viable product first with essential features only; Avoid feature creep until MVP is stable and functional.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### Clean Architecture
+Maintain clear separation between data models, business logic, and CLI user interface; Follow established clean architecture patterns with well-defined layers; Ensure each component has a single responsibility and is independently testable.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### Reliability (NON-NEGOTIABLE)
+Implement robust error handling for all user inputs to prevent crashes; Validate all user input before processing; Ensure graceful degradation and informative error messages.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### Maintainability
+Adhere to Clean Code principles with modular, well-documented design; Follow PEP 8 coding standards with comprehensive type hinting; Write self-documenting code with clear variable names and logical structure.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### In-Memory Persistence
+Strictly use in-memory storage (variables/lists) only; No external databases or file I/O for this phase; Ensure all data remains in application memory during runtime.
 
-### [PRINCIPLE_6_NAME]
+### CLI-First Interface
+Provide intuitive interactive console loop with clear menu options; Follow standard CLI interaction patterns with consistent user experience; Ensure accessibility and usability through text-based interface.
 
+## Technology Standards
+Python 3.13+ with UV package management; PEP 8 compliance with mandatory type hinting; Use of modern Python features and idioms; Spec-Driven Development methodology using Spec-Kit Plus.
 
-[PRINCIPLE__DESCRIPTION]
-
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Development Workflow
+Follow Spec-Driven Development with clear spec, plan, and tasks artifacts; Implement using TDD approach where applicable; Ensure all changes are testable and verifiable; Maintain clean commit history with descriptive messages.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+All implementations must comply with these constitutional principles; Changes to this constitution require explicit approval and documentation; Each principle is testable and verifiable through code review and automated checks; Deviations from these principles must be justified and documented.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-01-10 | **Last Amended**: 2026-01-10

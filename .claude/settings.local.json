@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(sp.constitution)",
+      "Bash(git fetch --all --prune)",
+      "Bash(pwsh -Command \".specify/scripts/powershell/create-new-feature.ps1 -Json ''/sp.specify Phase I: In-Memory Python Console Todo App\n\nTarget audience: Users requiring a lightweight, ephemeral CLI task manager\nFocus: demonstrating Spec-Driven Development \\(SDD\\) via Agentic workflows to build core CRUD functionality\n\nSuccess criteria:\n- Fully functional CLI implementing 5 core features: Add, View, Update, Delete, Mark Complete\n- Strict in-memory storage implementation \\(data persists only during runtime\\)\n- Project initialized and managed using UV with Python 3.13+\n- Clean separation of concerns \\(Model, Service, UI\\) generated entirely via Claude Code\n- Graceful handling of invalid user inputs \\(e.g., non-existent IDs\\)\n\nConstraints:\n- Tech Stack: Python 3.13+, UV, Claude Code, Spec-Kit Plus\n- Storage: Runtime memory only \\(Python Lists/Dictionaries\\)\n- Interface: Text-based console interaction only\n- Methodology: No manual coding; strict adherence to \"\"Spec → Plan → Task → Implement\"\" flow\n\nNot building:\n- Persistent storage \\(Database, SQLite, JSON, or CSV file saving\\)\n- Graphical User Inte'' -Number 1 -ShortName ''cli-todo-app''\")",
+      "Bash(python src/main.py --help)",
+      "Bash(python test_validation.py)",
+      "Bash(python test_validation_simple.py)",
+      "Bash(timeout 10s python src/main.py)",
+      "Bash(python -c \"import sys; sys.path.insert\\(0, ''.''\\); from src.main import main; print\\(''Import successful''\\)\")",
+      "Bash(timeout 5s cd src)",
+      "Bash(python main.py)",
+      "Bash(python -c \"import subprocess; import sys; result = subprocess.run\\([sys.executable, ''src/main.py''], timeout=3, capture_output=True, text=True\\); print\\(''App started successfully''\\)\")",
+      "Bash(python -c \"\nimport run_todo_app\nprint\\(''Application entry point created successfully''\\)\nprint\\(''To run the Todo App, use: python run_todo_app.py''\\)\n\")"
+    ]
+  }
+}
