@@ -1,0 +1,232 @@
+openapi: 3.0.0
+info:
+  title: Task Management API
+  description: API for managing user tasks with strict data isolation
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Development server
+
+paths:
+  /tasks:
+    get:
+      summary: Get all tasks for the authenticated user
+      description: Retrieve a list of all tasks that belong to the authenticated user
+      operationId: get_tasks
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved user's tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    post:
+      summary: Create a new task
+      description: Create a new task associated with the authenticated user
+      operationId: create_task
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCreate'
+      responses:
+        '201':
+          description: Task successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /tasks/{task_id}:
+    put:
+      summary: Update an existing task
+      description: Update a task that belongs to the authenticated user
+      operationId: update_task
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The unique identifier of the task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskUpdate'
+      responses:
+        '200':
+          description: Task successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+    delete:
+      summary: Delete a task
+      description: Delete a task that belongs to the authenticated user
+      operationId: delete_task
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The unique identifier of the task
+      responses:
+        '204':
+          description: Task successfully deleted
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    TaskResponse:
+      type: object
+      required:
+        - id
+        - title
+        - is_completed
+        - user_id
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the task
+        title:
+          type: string
+          maxLength: 255
+          description: Title of the task
+        description:
+          type: string
+          nullable: true
+          description: Detailed description of the task
+        is_completed:
+          type: boolean
+          description: Whether the task has been completed
+        user_id:
+          type: string
+          format: uuid
+          description: ID of the user who owns this task
+        created_at:
+          type: string
+          format: date-time
+          description: When the task was created
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the task was last updated
+
+    TaskCreate:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Title of the task
+        description:
+          type: string
+          nullable: true
+          description: Detailed description of the task
+        is_completed:
+          type: boolean
+          default: false
+          description: Whether the task should be initially marked as completed
+
+    TaskUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          nullable: true
+          description: New title of the task (if updating)
+        description:
+          type: string
+          nullable: true
+          description: New description of the task (if updating)
+        is_completed:
+          type: boolean
+          nullable: true
+          description: New completion status (if updating)
+
+  responses:
+    UnauthorizedError:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - detail
+            properties:
+              detail:
+                type: string
+                example: "Authentication required"
+
+    ValidationError:
+      description: Validation error in request data
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - detail
+            properties:
+              detail:
+                type: string
+                example: "Request validation failed"
+
+    NotFoundError:
+      description: Resource not found (either doesn't exist or belongs to another user)
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - detail
+            properties:
+              detail:
+                type: string
+                example: "Task not found"

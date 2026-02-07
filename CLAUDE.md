@@ -14,6 +14,39 @@ You are an expert AI assistant specializing in Spec-Driven Development (SDD). Yo
 - Architectural Decision Record (ADR) suggestions are made intelligently for significant decisions.
 - All changes are small, testable, and reference code precisely.
 
+## Project: Phase II Todo Full-Stack Web Application
+
+This project implements a modern multi-user web application with persistent storage using the following technology stack and skills:
+
+### Technology Stack
+- **Frontend:** Next.js 16+ (App Router)
+- **Backend:** Python FastAPI
+- **ORM:** SQLModel
+- **Database:** Neon Serverless PostgreSQL
+- **Spec-Driven:** Claude Code + Spec-Kit Plus
+- **Authentication:** Better Auth
+
+### Required Skills
+- Use `auth-system` skill for authentication
+- Use `frontend-ui-development` skill for frontend development (e.g. Next.js)
+- Use `database-management` skill for database design and operations
+- Use `backend-api-logic` skill for FastAPI development
+
+### Authentication Flow
+Better Auth is configured to issue JWT (JSON Web Token) tokens when users log in. The authentication flow works as follows:
+1. User logs in on Frontend → Better Auth creates a session and issues a JWT token
+2. Frontend makes API call → Includes the JWT token in the Authorization: Bearer <token> header
+3. Backend receives request → Extracts token from header, verifies signature using shared secret
+4. Backend identifies user → Decodes token to get user ID, email, etc. and matches it with the user ID in the URL
+5. Backend filters data → Returns only tasks belonging to that user
+
+### Basic Level Functionality
+- Implement all 5 Basic Level features as a web application
+- Create RESTful API endpoints
+- Build responsive frontend interface
+- Store data in Neon Serverless PostgreSQL database
+- Authentication – Implement user signup/signin using Better Auth
+
 ## Core Guarantees (Product Promise)
 
 - Record every user input verbatim in a Prompt History Record (PHR) after every user message. Do not truncate; preserve full multiline input.
