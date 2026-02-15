@@ -15,8 +15,14 @@ from .config.logging import setup_logging
 async def lifespan(app: FastAPI):
     """Lifespan event handler."""
     logging.info("Application starting up...")
-    create_db_and_tables()
-    logging.info("Database tables created/verified.")
+    try:
+        logging.info("Creating/verifying database tables...")
+        create_db_and_tables()
+        logging.info("Database tables created/verified successfully.")
+    except Exception as e:
+        logging.error(f"Error during database initialization: {str(e)}", exc_info=True)
+        # Continue startup even if DB init fails - tables might already exist
+        logging.info("Continuing startup despite DB initialization issue...")
     yield
     logging.info("Application shutting down...")
 
