@@ -1,12 +1,6 @@
 {
-  "version": 2,
-  "name": "phase2-todo-app",
-  "builds": [
-    {
-      "src": "frontend",
-      "use": "@vercel/next"
-    }
-  ],
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/.next",
   "env": {
     "NEXT_PUBLIC_API_BASE_URL": "https://mushariq-full-stack-phase2.hf.space",
     "DATABASE_URL": "postgresql://neondb_owner:npg_usfaEr1c3MXR@ep-billowing-pine-aix5tlpa-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require",
