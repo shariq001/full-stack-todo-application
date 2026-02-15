@@ -11,7 +11,8 @@ class ApiClient {
 
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    timeoutMs: number = 15000 // 15 second timeout
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
 
@@ -28,27 +29,40 @@ class ApiClient {
       headers,
     };
 
-    const response = await fetch(url, config);
+    // Create abort controller for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-    if (response.status === 401) {
-      clearAuthSession();
-      if (typeof window !== 'undefined') {
-        window.location.href = '/login';
+    try {
+      const response = await fetch(url, { ...config, signal: controller.signal });
+
+      if (response.status === 401) {
+        clearAuthSession();
+        if (typeof window !== 'undefined') {
+          window.location.href = '/login';
+        }
+        throw new Error('Unauthorized: Please log in again');
       }
-      throw new Error('Unauthorized: Please log in again');
-    }
 
-    // 204 No Content - return empty
-    if (response.status === 204) {
-      return undefined as T;
-    }
+      // 204 No Content - return empty
+      if (response.status === 204) {
+        return undefined as T;
+      }
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.detail || errorData.message || `HTTP error! status: ${response.status}`);
-    }
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || errorData.message || `HTTP error! status: ${response.status}`);
+      }
 
-    return await response.json();
+      return await response.json();
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error('Request timeout: Backend server is not responding. Please try again later.');
+      }
+      throw error;
+    } finally {
+      clearTimeout(timeoutId);
+    }
   }
 
   get<T>(endpoint: string, options?: RequestInit) {
