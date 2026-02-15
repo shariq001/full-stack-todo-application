@@ -62,4 +62,12 @@ async def read_current_user(authorization: str = Header(None)):
 @app.get("/")
 async def root():
     """Root endpoint."""
+    logging.info("Root endpoint called")
     return {"message": "Backend Infrastructure API is running!"}
+
+
+@app.options("/{full_path:path}")
+async def options_handler(full_path: str):
+    """Handle CORS preflight requests."""
+    logging.info(f"OPTIONS request for {full_path}")
+    return {"message": "OK"}
