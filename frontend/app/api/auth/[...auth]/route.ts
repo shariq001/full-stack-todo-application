@@ -10,9 +10,30 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-const auth = betterAuth({
+// Get the base URL from environment or construct from request
+const getBaseURL = (request?: NextRequest): string => {
+  // Use env var if explicitly set
+  if (process.env.NEXT_PUBLIC_BETTER_AUTH_URL) {
+    return process.env.NEXT_PUBLIC_BETTER_AUTH_URL;
+  }
+
+  // Try to get from request headers
+  if (request) {
+    const host = request.headers.get('x-forwarded-host') || request.headers.get('host');
+    const proto = request.headers.get('x-forwarded-proto') || 'http';
+    if (host) {
+      return `${proto}://${host}`;
+    }
+  }
+
+  // Fallback
+  return "http://localhost:3000";
+};
+
+// Create a function to initialize auth with the correct base URL
+const createAuth = (baseURL: string) => betterAuth({
   secret: process.env.BETTER_AUTH_SECRET!,
-  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000",
+  baseURL,
   database: pool,
   session: {
     expiresIn: 60 * 60 * 24,
@@ -26,6 +47,8 @@ const auth = betterAuth({
 
 export async function GET(request: NextRequest) {
   try {
+    const baseURL = getBaseURL(request);
+    const auth = createAuth(baseURL);
     return await auth.handler(request);
   } catch (error: any) {
     console.error('[Auth GET Error]', error);
@@ -35,6 +58,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const baseURL = getBaseURL(request);
+    const auth = createAuth(baseURL);
     return await auth.handler(request);
   } catch (error: any) {
     console.error('[Auth POST Error]', error);
