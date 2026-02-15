@@ -77,7 +77,10 @@ export class AuthService {
   }
 
   static async forgotPassword(email: string) {
-    const baseURL = process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000";
+    // Use current domain if available (client-side), otherwise use env var
+    const baseURL = typeof window !== 'undefined'
+      ? window.location.origin
+      : (process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000");
     const response = await fetch(`${baseURL}/api/auth/forget-password`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -90,7 +93,10 @@ export class AuthService {
   }
 
   static async resetPassword(token: string, newPassword: string) {
-    const baseURL = process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000";
+    // Use current domain if available (client-side), otherwise use env var
+    const baseURL = typeof window !== 'undefined'
+      ? window.location.origin
+      : (process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000");
     const response = await fetch(`${baseURL}/api/auth/reset-password`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
