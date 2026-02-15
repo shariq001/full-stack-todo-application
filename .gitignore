@@ -1,0 +1,93 @@
+# =======================================================
+# General & OS
+# =======================================================
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# =======================================================
+# Environment Variables & Secrets (CRITICAL)
+# =======================================================
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# =======================================================
+# Python / Backend
+# =======================================================
+# Byte-compiled / Optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+.venv/
+env/
+backend/venv/
+backend/.venv/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Distribution / Builds
+dist/
+build/
+*.egg-info/
+
+# =======================================================
+# Node.js / Frontend (Next.js)
+# =======================================================
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Production build artifacts
+frontend/build/
+frontend/dist/
+
+# Vercel deployments
+.vercel/
+
+# Debug logs
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Turbopack cache (visible in your tree)
+.turbo/
+
+# =======================================================
+# Databases
+# =======================================================
+*.sqlite
+*.sqlite3
+*.db
+# Keep the schema definitions, ignore actual DB files
+
+# =======================================================
+# Tooling & AI Context
+# =======================================================
+# Claude Code / CLI local history and context
+.claude/
+
+# Gemini local context
+.gemini/
+
+# Specify Tooling
+# We ignore memory (session data) but keep templates/scripts
+.specify/memory/
+
+# IDE settings (Optional but recommended)
+.vscode/
+.idea/
+.vercel
+.env*.local
