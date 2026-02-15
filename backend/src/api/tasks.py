@@ -3,6 +3,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Header
 from typing import List
 from datetime import datetime
+import logging
 
 from ..auth import get_current_user_from_token
 from ..schemas.task_schemas import TaskCreate, TaskRead, TaskUpdate
@@ -16,6 +17,7 @@ from ..services.task_service import (
 from ..services.database import get_db_session
 from sqlmodel import Session
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
 
@@ -34,9 +36,16 @@ async def get_tasks(
     Returns:
         List of tasks belonging to the authenticated user
     """
-    current_user = get_current_user_from_token(authorization)
-    tasks = get_tasks_by_user_id(db_session, current_user.id)
-    return tasks
+    try:
+        logger.info("Getting tasks - Auth header present: %s", authorization is not None)
+        current_user = get_current_user_from_token(authorization)
+        logger.info(f"Authenticated user: {current_user.id}")
+        tasks = get_tasks_by_user_id(db_session, current_user.id)
+        logger.info(f"Found {len(tasks)} tasks for user {current_user.id}")
+        return tasks
+    except Exception as e:
+        logger.error(f"Error fetching tasks: {str(e)}", exc_info=True)
+        raise
 
 
 @router.get("/{task_id}", response_model=TaskRead)
