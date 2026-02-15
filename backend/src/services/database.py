@@ -1,12 +1,27 @@
 """Database service module for connection management."""
 from sqlmodel import Session
 from typing import Generator
-from ..models.base import engine
+from ..models.base import engine, create_db_and_tables
 import logging
 
+logger = logging.getLogger(__name__)
+_db_initialized = False
 
 def get_db_session() -> Generator[Session, None, None]:
     """Dependency to get database session for FastAPI."""
+    global _db_initialized
+
+    # Initialize tables on first use (lazy initialization)
+    if not _db_initialized:
+        try:
+            logger.info("Lazy initializing database tables on first request...")
+            create_db_and_tables()
+            _db_initialized = True
+            logger.info("Database tables initialized successfully")
+        except Exception as e:
+            logger.error(f"Error initializing database: {str(e)}", exc_info=True)
+            # Continue anyway - tables might already exist
+
     with Session(engine) as session:
         yield session
 
